@@ -7,6 +7,7 @@ import qualified Eval
 import qualified Eval2
 import qualified Eval3
 import qualified Eval4
+import qualified Eval5
 -- import EvalDebug2
 import EvalTypes
 
@@ -159,6 +160,13 @@ eval4 prog = (final_costs, msgs)
        runWriter $ runStateT (Eval4.eval topStack topExpr)
                              (mkInitHeap prog, emptyCosts, 1)
 
+eval5 :: Evaluator
+eval5 prog = (final_costs, msgs)
+  where
+    (((ccs,result), (final_heap, final_costs, _)), msgs) =
+       runWriter $ runStateT (Eval5.eval topStack topExpr)
+                             (mkInitHeap prog, emptyCosts, 1)
+
 -----------------------------------------------------------------------------
 
 parseFile :: FilePath -> IO [Bind]
@@ -196,8 +204,9 @@ allTests1 = allTests eval1
 allTests2 = allTests eval2
 allTests3 = allTests eval3
 allTests4 = allTests eval4
+allTests5 = allTests eval5
 
-versions = [eval1, eval2, eval3, eval4]
+versions = [eval1, eval2, eval3, eval4, eval5]
 
 cmpTest :: FilePath -> IO ()
 cmpTest f = do
